@@ -349,7 +349,7 @@ class GitAuthHelper {
                 else if (addr === null || addr === void 0 ? void 0 : addr.startsWith('https://')) {
                     addr = addr.substr(8);
                 }
-                this.sshCommand += ` -o ProxyCommand="nc -v -X connect -x ${addr} %h %p"'`;
+                this.sshCommand += ` -o ProxyCommand="nc -v -X connect -x ${addr} %h %p"`;
             }
             else if (process.env['https_proxy'] !== undefined) {
                 let addr = process.env['https_proxy'];
@@ -359,7 +359,7 @@ class GitAuthHelper {
                 else if (addr === null || addr === void 0 ? void 0 : addr.startsWith('https://')) {
                     addr = addr.substr(8);
                 }
-                this.sshCommand += ` -o ProxyCommand="nc -v -X connect -x ${addr} %h %p"'`;
+                this.sshCommand += ` -o ProxyCommand="nc -v -X connect -x ${addr} %h %p"`;
             }
             core.info(`Temporarily overriding GIT_SSH_COMMAND=${this.sshCommand}`);
             this.git.setEnvironmentVariable('GIT_SSH_COMMAND', this.sshCommand);
