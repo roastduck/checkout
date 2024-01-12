@@ -263,7 +263,10 @@ class GitAuthHelper {
     this.sshCommand += ` -o "UserKnownHostsFile=$RUNNER_TEMP/${path.basename(
       this.sshKnownHostsPath
     )}"`
-    if (process.env['http_proxy'] !== undefined) {
+    if (process.env['socks5_proxy'] !== undefined) {
+      let addr = process.env['socks5_proxy']
+      this.sshCommand += ` -o ProxyCommand="nc -v -x ${addr} %h %p"`
+    } else if (process.env['http_proxy'] !== undefined) {
       let addr = process.env['http_proxy']
       if (addr?.startsWith('http://')) {
         addr = addr.substr(7)

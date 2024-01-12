@@ -1,4 +1,4 @@
-**Change of this fork: making git connection over SSH follow http_proxy or https_proxy environment variable.**
+**Change of this fork: making git connection over SSH follow http_proxy or https_proxy environment variable, and a custom socks5_proxy environment variable.**
 
 [![Build and Test](https://github.com/actions/checkout/actions/workflows/test.yml/badge.svg)](https://github.com/actions/checkout/actions/workflows/test.yml)
 
