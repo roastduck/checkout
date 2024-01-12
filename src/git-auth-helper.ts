@@ -263,25 +263,27 @@ class GitAuthHelper {
     this.sshCommand += ` -o "UserKnownHostsFile=$RUNNER_TEMP/${path.basename(
       this.sshKnownHostsPath
     )}"`
-    if (process.env['socks5_proxy'] !== undefined) {
-      let addr = process.env['socks5_proxy']
-      this.sshCommand += ` -o ProxyCommand="nc -v -x ${addr} %h %p"`
-    } else if (process.env['http_proxy'] !== undefined) {
-      let addr = process.env['http_proxy']
-      if (addr?.startsWith('http://')) {
-        addr = addr.substr(7)
-      } else if (addr?.startsWith('https://')) {
-        addr = addr.substr(8)
+    if (process.env['no_proxy_git'] === undefined) {
+      if (process.env['socks5_proxy'] !== undefined) {
+        let addr = process.env['socks5_proxy']
+        this.sshCommand += ` -o ProxyCommand="nc -v -x ${addr} %h %p"`
+      } else if (process.env['http_proxy'] !== undefined) {
+        let addr = process.env['http_proxy']
+        if (addr?.startsWith('http://')) {
+          addr = addr.substr(7)
+        } else if (addr?.startsWith('https://')) {
+          addr = addr.substr(8)
+        }
+        this.sshCommand += ` -o ProxyCommand="nc -v -X connect -x ${addr} %h %p"`
+      } else if (process.env['https_proxy'] !== undefined) {
+        let addr = process.env['https_proxy']
+        if (addr?.startsWith('http://')) {
+          addr = addr.substr(7)
+        } else if (addr?.startsWith('https://')) {
+          addr = addr.substr(8)
+        }
+        this.sshCommand += ` -o ProxyCommand="nc -v -X connect -x ${addr} %h %p"`
       }
-      this.sshCommand += ` -o ProxyCommand="nc -v -X connect -x ${addr} %h %p"`
-    } else if (process.env['https_proxy'] !== undefined) {
-      let addr = process.env['https_proxy']
-      if (addr?.startsWith('http://')) {
-        addr = addr.substr(7)
-      } else if (addr?.startsWith('https://')) {
-        addr = addr.substr(8)
-      }
-      this.sshCommand += ` -o ProxyCommand="nc -v -X connect -x ${addr} %h %p"`
     }
     core.info(`Temporarily overriding GIT_SSH_COMMAND=${this.sshCommand}`)
     this.git.setEnvironmentVariable('GIT_SSH_COMMAND', this.sshCommand)
